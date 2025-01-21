@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <deque>
-#include <vector>
-#include <memory>
+#include <list>
+#include <stdexcept>
 
 template <typename T>
 // Create a super class so subclasses can implement same functions in different ways
@@ -27,7 +27,7 @@ class QImpl {
 
 
 template <typename T>
-class MyDeque: public QImpl {
+class MyDeque: public QImpl<T> {
   private:
     std::deque<T> deque;
     
@@ -60,7 +60,7 @@ class MyDeque: public QImpl {
 
 
 template <typename T>
-class MyList: public QImpl {
+class MyList: public QImpl<T> {
   private:
     std::list<T> list;
     
