@@ -15,15 +15,10 @@ template <typename T>
 
 class QImpl {
   public:
-    // Add
     virtual void add(const T& item) = 0;
-    // Get
     virtual T get() = 0;
-    // Remove
     virtual void remove() = 0;
-    // Size
     virtual size_t size() = 0;
-    // Clear
     virtual void clear() = 0;
     virtual ~QImpl() noexcept = default;
 };
@@ -100,10 +95,6 @@ template <typename T>
 class Queue {
   private:
     QImpl<T>* impl;
-
-    // Disable copy and assignment
-    // Queue(const Queue&) = delete;
-    // Queue& operator=(const Queue&) = delete;
 
     public:
       Queue(QImpl<T>* implementation) : impl(implementation){}
