@@ -6,6 +6,8 @@
 #include <list>
 #include <stdexcept>
 
+using namespace std;
+
 
 
 template <typename T>
@@ -23,7 +25,7 @@ class QImpl {
     virtual size_t size() = 0;
     // Clear
     virtual void clear() = 0;
-    virtual ~QImpl() = default;
+    virtual ~QImpl() noexcept = default;
 };
 
 
@@ -34,27 +36,27 @@ class MyDeque: public QImpl<T> {
     std::deque<T> deque;
     
   public:
-    void add(const T& item) override {
+    void add(const T& item) {
       deque.push_back(item);
     }
 
-    void push_back(const T& item) override {
+    void push_back(const T& item) {
       deque.push_back(item);
     }
 
-    T get() override {
+    T get() {
       return deque.front();
     }
 
-    void remove() override {
+    void remove() {
       deque.pop_front();
     }
 
-    size_t size() override {
+    size_t size() {
       return deque.size();
     }
 
-    void clear() override {
+    void clear() {
       deque.clear();
     }
 
@@ -68,27 +70,27 @@ class MyList: public QImpl<T> {
     std::list<T> list;
     
   public:
-    void add(const T& item) override {
+    void add(const T& item) {
       list.push_back(item);
     }
 
-    void push_back(const T& item) override {
+    void push_back(const T& item) {
       list.push_back(item);
     }
 
-    T get() override {
+    T get() {
       return list.front();
     }
 
-    void remove() override {
+    void remove() {
       list.pop_front();
     }
 
-    size_t size() override {
+    size_t size() {
       return list.size();
     }
 
-    void clear() override {
+    void clear() {
       list.clear();
     }
 };
@@ -104,7 +106,7 @@ class Queue {
     // Queue& operator=(const Queue&) = delete;
 
     public:
-      explicit Queue(QImpl<T>* implementation) : impl(implementation){}
+      Queue(QImpl<T>* implementation) : impl(implementation){}
 
       void add(const T& item){
         impl->add(item);
@@ -127,21 +129,20 @@ class Queue {
       }
 
       void changeImpl(QImpl<T>* newImpl) {
-        newImpl->clear();
         while (impl->size() > 0) {
-          newImpl->add(impl.get());
+          newImpl->add(impl->get());
           impl->remove();
         }
         impl = newImpl;
       }
 
-      ~Queue() = default;
+      virtual ~Queue() = default;
 };
 
 template <typename T>
     void displayAndEmptyQueue(Queue<T>& q) {
       for(int i = 0; i < q.size(); i++){
-        cout << q[i] << endl;
+        cout << q.get() << endl;
       }
 
       q.clear();
