@@ -6,6 +6,8 @@
 #include <list>
 #include <stdexcept>
 
+
+
 template <typename T>
 // Create a super class so subclasses can implement same functions in different ways
 
@@ -55,6 +57,7 @@ class MyDeque: public QImpl<T> {
     void clear() override {
       deque.clear();
     }
+
 };
 
 
@@ -123,7 +126,25 @@ class Queue {
         impl->clear();
       }
 
+      void changeImpl(QImpl<T>* newImpl) {
+        newImpl->clear();
+        while (impl->size() > 0) {
+          newImpl->add(impl.get());
+          impl->remove();
+        }
+        impl = newImpl;
+      }
+
       ~Queue() = default;
 };
+
+template <typename T>
+    void displayAndEmptyQueue(Queue<T>& q) {
+      for(int i = 0; i < q.size(); i++){
+        cout << q[i] << endl;
+      }
+
+      q.clear();
+    }
 
 #endif
