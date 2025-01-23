@@ -89,6 +89,7 @@ private:
 public:
     explicit Queue(QImpl<T>* implementation) : impl(implementation) {
         if (!implementation) throw invalid_argument("Implementation cannot be null.");
+        implementation->clear();
     }
 
     void add(const T& item) {

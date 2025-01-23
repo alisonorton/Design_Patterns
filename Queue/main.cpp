@@ -18,7 +18,7 @@ q.add(95);
 displayAndEmptyQueue(q);
 // Test strings
 MyDeque<string> deq2;
-deq2.add ("Discard me"); // Contents will be discarded
+deq2.add ("Discard me"); // QUESTION: I don't see how this string would be discarded 
 Queue<string> q2(&deq2);
 q2.add("91");
 q2.add("92");
