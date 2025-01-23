@@ -8,135 +8,130 @@
 
 using namespace std;
 
-
-
+// Abstract Base Class
 template <typename T>
-// Create a super class so subclasses can implement same functions in different ways
-
 class QImpl {
-  public:
-    virtual void add(const T& item) = 0;
-    virtual T get() = 0;
-    virtual void remove() = 0;
-    virtual size_t size() = 0;
-    virtual void clear() = 0;
-    virtual ~QImpl() noexcept = default;
+public:
+    virtual void add(const T& item) = 0;  // Add an item
+    virtual T get() = 0;                 // Get the front item
+    virtual void remove() = 0;           // Remove the front item
+    virtual size_t size() = 0;           // Get the size of the queue
+    virtual void clear() = 0;            // Clear the queue
+    virtual ~QImpl() = default;          // Virtual destructor
 };
-
 
 
 template <typename T>
-class MyDeque: public QImpl<T> {
-  private:
-    std::deque<T> deque;
-    
-  public:
-    void add(const T& item) {
-      deque.push_back(item);
+class MyDeque : public QImpl<T> {
+private:
+    deque<T> deque;
+
+public:
+    void add(const T& item) override {
+        deque.push_back(item);
     }
 
-    void push_back(const T& item) {
-      deque.push_back(item);
+    T get() override {
+        if (deque.empty()) throw runtime_error("Queue is empty.");
+        return deque.front();
     }
 
-    T get() {
-      return deque.front();
+    void remove() override {
+        if (deque.empty()) throw runtime_error("Queue is empty.");
+        deque.pop_front();
     }
 
-    void remove() {
-      deque.pop_front();
+    size_t size() override {
+        return deque.size();
     }
 
-    size_t size() {
-      return deque.size();
+    void clear() override {
+        deque.clear();
     }
-
-    void clear() {
-      deque.clear();
-    }
-
 };
 
-
-
+// Implementation Using std::list
 template <typename T>
-class MyList: public QImpl<T> {
-  private:
-    std::list<T> list;
-    
-  public:
-    void add(const T& item) {
-      list.push_back(item);
+class MyList : public QImpl<T> {
+private:
+    list<T> list;
+
+public:
+    void add(const T& item) override {
+        list.push_back(item);
     }
 
-    void push_back(const T& item) {
-      list.push_back(item);
+    T get() override {
+        if (list.empty()) throw runtime_error("Queue is empty.");
+        return list.front();
     }
 
-    T get() {
-      return list.front();
+    void remove() override {
+        if (list.empty()) throw runtime_error("Queue is empty.");
+        list.pop_front();
     }
 
-    void remove() {
-      list.pop_front();
+    size_t size() override {
+        return list.size();
     }
 
-    size_t size() {
-      return list.size();
-    }
-
-    void clear() {
-      list.clear();
+    void clear() override {
+        list.clear();
     }
 };
 
-
+// Generic Queue Class
 template <typename T>
 class Queue {
-  private:
+private:
     QImpl<T>* impl;
 
-    public:
-      Queue(QImpl<T>* implementation) : impl(implementation){}
+public:
+    explicit Queue(QImpl<T>* implementation) : impl(implementation) {
+        if (!implementation) throw invalid_argument("Implementation cannot be null.");
+    }
 
-      void add(const T& item){
+    void add(const T& item) {
         impl->add(item);
-      }
+    }
 
-      T get() {
+    T get() {
         return impl->get();
-      }
+    }
 
-      void remove() {
+    void remove() {
         impl->remove();
-      }
+    }
 
-      size_t size() {
+    size_t size() const {
         return impl->size();
-      }
+    }
 
-      void clear() {
+    void clear() {
         impl->clear();
-      }
+    }
 
-      void changeImpl(QImpl<T>* newImpl) {
+    void changeImpl(QImpl<T>* newImpl) {
+        newImpl->clear();
         while (impl->size() > 0) {
-          newImpl->add(impl->get());
-          impl->remove();
+            newImpl->add(impl->get());
+            impl->remove();
         }
         impl = newImpl;
-      }
+    }
 
-      virtual ~Queue() = default;
+
+    ~Queue() = default;
 };
 
+// Display and Empty Queue
 template <typename T>
-    void displayAndEmptyQueue(Queue<T>& q) {
-      for(int i = 0; i < q.size(); i++){
-        cout << q.get() << endl;
-      }
-
-      q.clear();
+void displayAndEmptyQueue(Queue<T>& q) {
+    while (q.size() > 0) {
+        cout << q.get() << " ";
+        q.remove();
     }
+    cout << endl;
+}
 
 #endif
