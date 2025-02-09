@@ -4,21 +4,47 @@ import java.util.*;
 class StockData {
     private String ticker;
     private String companyName;
-    private double[] values;
+    private double currentPrice;
+    private double priceChange;
+    private double percentChange;
+    private double ytdChange;
+    private double weekHigh;
+    private double weekLow;
 
-    public void setData(String companyName, String ticker, double... values) {
+    public void setData(String companyName, String ticker, double currentPrice, double priceChange, double percentChange, double ytdChange, double weekHigh, double weekLow) {
         this.companyName = companyName;
         this.ticker = ticker;
-        this.values = values;
+        this.currentPrice = currentPrice;
+        this.priceChange = priceChange;
+        this.percentChange = percentChange;
+        this.ytdChange = ytdChange;
+        this.weekHigh = weekHigh;
+        this.weekLow = weekLow;
+    }
+
+    public String getTicker() {
+      return ticker;
     }
 
     public double getPrice() {
-      return values[0];
+      return currentPrice;
+    }
+
+    public double getChangePercent() {
+      return percentChange;
+    }
+
+    public double getHigh() {
+      return weekHigh;
+    }
+
+    public double getLow() {
+      return weekLow;
     }
 
     @Override
     public String toString() {
-        return "Ticker: " + ticker + ", Company: " + companyName + ", Values: " + Arrays.toString(values);
+        return companyName + " " + ticker + " " + currentPrice + ", " + priceChange + ", " + percentChange + ", " + ytdChange + ", " + weekHigh + ", " + weekLow;
     }
 }
 
@@ -27,7 +53,7 @@ class Snapshot {
     private List<StockData> stockDataList = new ArrayList<>();
 
     public void setDate(String date) {
-        this.date = date;
+        this.date = date.replace("Last updated ", "");
     }
 
     public String getDate() {
@@ -48,7 +74,9 @@ class Snapshot {
     }
 }
 
-
+/******************************************
+ * Main
+ ******************************************/
 
 public class Main {
     static List<Snapshot> snapshotArray = new ArrayList<>();
@@ -77,11 +105,16 @@ public class Main {
                     StringBuilder companyNameBuilder = new StringBuilder();
                     String ticker = "";
                     
+                    
                     for (int i = tokens.length - 1; i >= 0; i--) {
+                      if(tokens[i].trim().equals("-")) {
+                        continue;
+                      }
                         if (!tokens[i].isEmpty()) { // Ensure token is not empty
                             try {
                                 numericValues.add(0, Double.parseDouble(tokens[i]));
                             } catch (NumberFormatException e) {
+                              
                                 ticker = tokens[i];
                                 companyNameBuilder.setLength(0);
                                 for (int j = 0; j < i; j++) {
@@ -91,9 +124,9 @@ public class Main {
                             }
                         }
                     }
-                    
+
                     StockData stockData = new StockData();
-                    stockData.setData(companyNameBuilder.toString().trim(), ticker, numericValues.stream().mapToDouble(d -> d).toArray());
+                    stockData.setData(companyNameBuilder.toString().trim(), ticker, numericValues.get(0), numericValues.get(1), numericValues.get(2), numericValues.get(3), numericValues.get(4), numericValues.get(5));
                     snapshot.addStockData(stockData);
                 }
                 count++;
@@ -107,14 +140,22 @@ public class Main {
             e.printStackTrace();
         }
         
-        // Print the snapshotArray values
-        for (Snapshot snapshot : snapshotArray) {
-            System.out.println(snapshot);
-        }
+        //
+        // Implementing Observer pattern
+        //
+
+        LocalStocks localStocks = new LocalStocks();
 
         Average average = new Average();
-        // LocalStocks.subscribe(average);
-        average.update();
+        localStocks.subscribe(average);
+
+        HighLow highLow = new HighLow();
+        localStocks.subscribe(highLow);
+
+        Selectors selectors = new Selectors();
+        localStocks.subscribe(selectors);
+
+        localStocks.notifySubs();
     }
 }
 

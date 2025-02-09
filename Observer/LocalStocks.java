@@ -9,8 +9,11 @@ interface Publisher {
 
 
 class LocalStocks implements Publisher {
-  private
-    ArrayList<Observer> subscribers;
+  private ArrayList<Observer> subscribers = new ArrayList<>();
+
+    public ArrayList<Observer> getSubscribers() {
+      return subscribers;
+    }
   
     @Override
     public void subscribe(Observer observer) {
