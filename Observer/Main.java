@@ -146,16 +146,16 @@ public class Main {
 
         LocalStocks localStocks = new LocalStocks();
 
-        Average average = new Average();
-        localStocks.subscribe(average);
+        List<Observer> observers = List.of(new Average(), new HighLow(), new Selectors());
+        
+        for (Observer observer : observers) {
+            localStocks.subscribe(observer);
+        }
 
-        HighLow highLow = new HighLow();
-        localStocks.subscribe(highLow);
-
-        Selectors selectors = new Selectors();
-        localStocks.subscribe(selectors);
-
-        localStocks.notifySubs();
+        for (Snapshot snapshot : snapshotArray) {
+          localStocks.notifySubs();
+      }
+      
     }
 }
 
