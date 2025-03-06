@@ -1,0 +1,41 @@
++-----------------------------+
+|         Database            |
++-----------------------------+
+| - id : string               |
+| - data : map<string,string> |
++-----------------------------+
+| + Database(id:string)       |
+| + getID() : string          |
+| + exists(key:string) : bool |
+| + add(key:string, value:string) |
+| + get(key:string) : string  |
+| + update(key:string, value:string) |
+| + remove(key:string)        |
+| + display(ostream&)         |
+| + empty() : bool            |
++-----------------------------+
+
+             ▲
+             │
++-----------------------------+             +-----------------------------+
+|          Command            |◄────────────┐|      MacroCommand         |
++-----------------------------+             |+-----------------------------+
+| «abstract»                  |             | - commands: vector<Command*>|
+| + execute() : bool          |             | - executed: bool            |
+| + undo() : bool             |             +-----------------------------+
++-----------------------------+             | + addCommand(Command*)      |
+             ▲                              | + execute() : bool          |
+             │                              | + undo() : bool             |
+    ┌────────┴─────────┬────────────┐         | + ~MacroCommand()           |
+    │                  │            │         +-----------------------------+
++----------+     +-----------+  +------------+
+| AddCmd   |     | UpdateCmd |  | RemoveCmd  |
++----------+     +-----------+  +------------+
+| - db     |     | - db      |  | - db       |
+| - key    |     | - key     |  | - key      |
+| - value  |     | - newVal  |  |            |
+| - executed|    | - oldVal  |  | - removedValue|
++----------+     +-----------+  +------------+
+| + execute()|  | + execute()| | + execute() |
+| + undo()   |  | + undo()   | | + undo()    |
++----------+     +-----------+  +------------+

@@ -85,22 +85,3 @@ class FilterOutput extends BaseDecorator {
   }
 }
 
-
-// class FilterOutput extends BaseDecorator {
-//   private Predicate predicate;
-
-//   public FilterOutput(Output base, Predicate predicate) {
-//       super(base);
-//       this.predicate = predicate;
-//   }
-
-//   public void write(Object o) {
-//       if (predicate.execute(o)) {
-//           System.out.println("DEBUG: Filtered -> " + o);  // Debugging filter
-//           base.write(o);
-//       } else {
-//           System.out.println("DEBUG: Skipped -> " + o);  // Debugging skipped lines
-//       }
-//   }
-// }
-

@@ -1,0 +1,24 @@
+Point color set to red
+Displaying a point at (1, 2)
+Filling a point at (1, 2)
+Location is (1, 2)
+Removing point from display
+---------------
+Line color set to red
+Displaying a line from start: (0, 0), end: (5, 5)
+Filling a line is nonsensical, but let's do it anyway!
+Location is start: (0, 0), end: (5, 5)
+Removing line from display
+---------------
+Rectangle color set to red
+Displaying rectangle at (10, 10) with width=20 and height=30
+Filling rectangle at (10, 10)
+Location is (10, 10)
+Removing rectangle from display
+---------------
+XXCircle color set to red
+Displaying XXCircle at (100, 100)
+Filling XXCircle at (100, 100)
+Location is (100, 100)
+Removing XXCircle from display
+---------------

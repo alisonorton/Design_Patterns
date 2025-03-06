@@ -1,0 +1,65 @@
+                +-----------------------+
+                |     DriverFactory     |  <-- (Interface)
+                +-----------------------+
+                | + getDisplayDriver()  |
+                | + getPrintDriver()    |
+                +-----------------------+
+                        /       \
+                       /         \
+                      /           \
+  +--------------------------------+    +---------------------------------+
+  |  LowResDriverFactory           |    |  HighResDriverFactory           |
+  +--------------------------------+    +---------------------------------+
+  | + getDisplayDriver()           |    | + getDisplayDriver()            |
+  | + getPrintDriver()             |    | + getPrintDriver()              |
+  +--------------------------------+    +---------------------------------+
+
+                +-----------------------+
+                |    DisplayDriver      |  <-- (Interface)
+                +-----------------------+
+                | + getDescription()    |
+                +-----------------------+
+                        /   \
+                       /     \
+                      /       \
++--------------------------------+    +--------------------------------+
+|  LowResDisplayDriver           |    |  HighResDisplayDriver          |
++--------------------------------+    +--------------------------------+
+| - instance: LowResDisplayDriver|    | - instance: HighResDisplayDriver|
+| + getInstance()                |    | + getInstance()                |
+| + getDescription()             |    | + getDescription()             |
++--------------------------------+    +--------------------------------+
+
+                +-----------------------+
+                |     PrintDriver       |  <-- (Interface)
+                +-----------------------+
+                | + getDescription()    |
+                +-----------------------+
+                        /   \
+                       /     \
+                      /       \
++--------------------------------+    +--------------------------------+
+|  LowResPrintDriver             |    |  HighResPrintDriver            |
++--------------------------------+    +--------------------------------+
+| - instance: LowResPrintDriver  |    | - instance: HighResPrintDriver |
+| + getInstance()                |    | + getInstance()                |
+| + getDescription()             |    | + getDescription()             |
++--------------------------------+    +--------------------------------+
+
+                +-----------------------+
+                |       Widget          |
+                +-----------------------+
+                | - displayDriver:      |
+                |     DisplayDriver     |
+                +-----------------------+
+                | + draw()              |
+                +-----------------------+
+
+                +-----------------------+
+                |      Document         |
+                +-----------------------+
+                | - printDriver:        |
+                |     PrintDriver       |
+                +-----------------------+
+                | + print()             |
+                +-----------------------+

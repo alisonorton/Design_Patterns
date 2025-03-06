@@ -86,8 +86,6 @@ public class Main {
                 output.write(line);
             }
 
-            // System.out.println("\nProcessing complete.");
-
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         } finally {
