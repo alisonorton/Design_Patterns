@@ -1,6 +1,7 @@
 import java.io.FileWriter;
 import java.io.IOException;
 
+
 // Abscract class
 interface Observer {
   public void update();    
